@@ -97,19 +97,40 @@ function SignupPage() {
         </div>
       </div>
 
-      <div className="hidden bg-hero lg:block">
-        <div className="flex h-full flex-col justify-between p-12">
-          <div className="ml-auto inline-flex items-center gap-2 rounded-full border border-border bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur">
+      <div className="relative hidden overflow-hidden lg:block">
+        <img 
+          src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1920" 
+          alt="College life" 
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+        <div className="relative flex h-full flex-col justify-between p-12">
+          <div className="ml-auto inline-flex items-center gap-2 rounded-full border border-border/40 bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur-md">
             <ShieldCheck className="h-3.5 w-3.5 text-success" /> Verified students only
           </div>
-          <div>
-            <h2 className="font-display text-4xl font-bold tracking-tight">
+          <div className="max-w-md">
+            <h2 className="font-display text-4xl font-bold tracking-tight text-foreground drop-shadow-sm">
               Your campus, <span className="text-gradient">your marketplace</span>.
             </h2>
-            <ul className="mt-6 space-y-3 text-sm">
-              <li className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-accent" /> AI fair price on every listing</li>
-              <li className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-success" /> .edu / .ac.in verified only</li>
-              <li className="flex items-center gap-2">⚡ Real-time chat & safe meetups</li>
+            <ul className="mt-6 space-y-3 text-sm text-foreground/80 font-medium drop-shadow-sm">
+              <li className="flex items-center gap-2">
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10">
+                  <Sparkles className="h-3.5 w-3.5 text-primary" />
+                </div>
+                AI fair price on every listing
+              </li>
+              <li className="flex items-center gap-2">
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-success/10">
+                  <ShieldCheck className="h-3.5 w-3.5 text-success" />
+                </div>
+                .edu / .ac.in verified only
+              </li>
+              <li className="flex items-center gap-2">
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-accent/10">
+                  <span className="text-xs">⚡</span>
+                </div>
+                Real-time chat & safe meetups
+              </li>
             </ul>
           </div>
         </div>

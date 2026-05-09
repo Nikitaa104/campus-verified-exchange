@@ -76,7 +76,7 @@ export function ChatModal({ isOpen, onClose, seller, productTitle, productPrice 
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
-            className="fixed bottom-4 right-4 z-50 flex h-[600px] w-full max-w-[400px] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-elegant sm:bottom-8 sm:right-8"
+            className="fixed inset-0 z-50 flex h-full w-full flex-col overflow-hidden rounded-none border-0 border-border bg-card shadow-elegant sm:bottom-8 sm:right-8 sm:inset-auto sm:h-[600px] sm:max-w-[400px] sm:rounded-2xl sm:border"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-border bg-card/50 p-4 backdrop-blur-md">

@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  ScrollRestoration,
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
@@ -75,6 +76,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap",
       },
+      {
+        rel: "preload",
+        as: "image",
+        href: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1920&q=80",
+        fetchpriority: "high",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -97,11 +104,14 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+import { GlobalBackButton } from "@/components/navigation/GlobalBackButton";
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <GlobalBackButton />
         <Outlet />
         <Toaster />
       </AuthProvider>

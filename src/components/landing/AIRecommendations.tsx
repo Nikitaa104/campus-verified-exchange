@@ -21,9 +21,9 @@ const MOCK_RECOMMENDATIONS = {
     icon: Compass,
     description: "Because you like 'Computer Science' and 'Gaming'.",
     items: [
-      { id: "4", title: "DSA Handwritten Notes", price: "₹120", ai: "₹100–₹150", tag: "Notes", reason: "Matches 'Computer Science'", image: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=500&auto=format&fit=crop&q=60" },
+      { id: "4", title: "DSA Handwritten Notes", price: "₹120", ai: "₹100–₹150", tag: "Notes", reason: "Matches 'Computer Science'", image: "https://img.sanishtech.com/u/28f66e560a0fa23ef0b1d74d811500a6.jpg" },
       { id: "5", title: "Razer BlackWidow V3", price: "₹8,500", ai: "₹8k–₹10k", tag: "Gaming", reason: "Matches 'Gaming'", image: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=500&auto=format&fit=crop&q=60" },
-      { id: "6", title: "Algorithms Book", price: "₹450", ai: "₹400–₹500", tag: "Books", reason: "Core CS material" }
+      { id: "6", title: "Algorithms Book", price: "₹450", ai: "₹400–₹500", tag: "Books", reason: "Core CS material", image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=500&auto=format&fit=crop&q=60" }
     ]
   },
   "viewed": {
@@ -31,9 +31,9 @@ const MOCK_RECOMMENDATIONS = {
     icon: Eye,
     description: "People who looked at 'Calculators' also checked these out.",
     items: [
-      { id: "7", title: "Casio FX-991ES Plus", price: "₹950", ai: "₹850–₹1000", tag: "Calculator", reason: "Often bought together", image: "https://img.sanishtech.com/u/6265559bd1a743db969c3886de8a91b7.jpg" },
-      { id: "8", title: "Engineering Drawing Kit", price: "₹450", ai: "₹400–₹500", tag: "Stationery", reason: "Common 1st year essential" },
-      { id: "9", title: "Lab Coat", price: "₹300", ai: "₹250–₹350", tag: "Apparel", reason: "Frequently viewed" }
+      { id: "7", title: "Casio FX-991ES Plus", price: "₹950", ai: "₹850–₹1000", tag: "Calculator", reason: "Often bought together", image: "https://img.sanishtech.com/u/64c83726e8790b30931d183a2bd9dedf.jpg" },
+      { id: "8", title: "Engineering Drawing Kit", price: "₹450", ai: "₹400–₹500", tag: "Stationery", reason: "Common 1st year essential", image: "https://images.unsplash.com/photo-1583086650426-302a2432c668?w=500&auto=format&fit=crop&q=60" },
+      { id: "9", title: "Lab Coat", price: "₹300", ai: "₹250–₹350", tag: "Apparel", reason: "Frequently viewed", image: "https://images.unsplash.com/photo-1584844308364-a9f44b2046db?w=500&auto=format&fit=crop&q=60" }
     ]
   },
   "trending": {
@@ -43,7 +43,7 @@ const MOCK_RECOMMENDATIONS = {
     items: [
       { id: "10", title: "Hero Sprint Cycle", price: "₹3,200", ai: "₹2.8k–₹3.5k", tag: "Transport", reason: "#1 Trending this week", image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=500&auto=format&fit=crop&q=60" },
       { id: "11", title: "Mini Fridge 45L", price: "₹5,500", ai: "₹5k–₹6.5k", tag: "Hostel", reason: "High demand right now", image: "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=500&auto=format&fit=crop&q=60" },
-      { id: "12", title: "Table Lamp", price: "₹600", ai: "₹500–₹700", tag: "Hostel", reason: "Hostel essential" }
+      { id: "12", title: "Table Lamp", price: "₹600", ai: "₹500–₹700", tag: "Hostel", reason: "Hostel essential", image: "https://images.unsplash.com/photo-1517409249764-a5e27a6c986c?w=500&auto=format&fit=crop&q=60" }
     ]
   }
 };
@@ -145,10 +145,12 @@ export function AIRecommendations() {
                   </div>
 
                   {it.image ? (
-                    <div className="mb-4 aspect-[4/3] overflow-hidden rounded-xl border border-border/40">
+                    <div className="mb-4 aspect-[4/3] overflow-hidden rounded-xl border border-border/40 bg-muted/20">
                       <img 
                         src={it.image} 
                         alt={it.title} 
+                        loading="lazy"
+                        decoding="async"
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" 
                       />
                     </div>

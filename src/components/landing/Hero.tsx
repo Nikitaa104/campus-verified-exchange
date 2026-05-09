@@ -1,38 +1,68 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect, memo } from "react";
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Sparkles, ShieldCheck, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+const HERO_BACKGROUNDS = [
+  { id: "i1", type: "image", src: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1920&q=80" },
+  { id: "i2", type: "image", src: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1920&q=80" },
+  { id: "i3", type: "image", src: "https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&w=1920&q=80" },
+  { id: "i4", type: "image", src: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1920&q=80" },
+];
+
 export function Hero() {
+  const [bgIndex, setBgIndex] = useState(0);
+
+  useEffect(() => {
+    // Preload images for smooth transitions
+    HERO_BACKGROUNDS.forEach((bg) => {
+      if (bg.type === "image") {
+        const img = new Image();
+        img.src = bg.src;
+      }
+    });
+
+    const interval = setInterval(() => {
+      setBgIndex((prev) => (prev + 1) % HERO_BACKGROUNDS.length);
+    }, 2000); // 2 seconds interval
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       <section className="relative flex min-h-[90vh] items-center overflow-hidden bg-background">
-      {/* Background Video with Smooth Fade-in */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        className="absolute inset-0 z-0 overflow-hidden"
-      >
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop"
-          className="w-full h-full object-cover"
-        >
-          <source 
-            src="https://assets.mixkit.co/videos/preview/mixkit-students-walking-in-a-college-campus-41551-large.mp4" 
-            type="video/mp4" 
-          />
-        </video>
-        {/* Subtle Dark-to-Transparent Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent pointer-events-none" />
-        {/* Bottom fade to blend cleanly into the rest of the page */}
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
-      </motion.div>
+        {/* Slideshow Background */}
+        <div className="absolute inset-0 z-0 overflow-hidden bg-black">
+          <AnimatePresence initial={false}>
+            <motion.div
+              key={bgIndex}
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ 
+                opacity: { duration: 0.5, ease: "easeInOut" },
+                scale: { duration: 2.5, ease: "linear" }
+              }}
+              className="absolute inset-0"
+            >
+              <img 
+                src={HERO_BACKGROUNDS[bgIndex].src} 
+                alt="Kampus Background" 
+                fetchPriority={bgIndex === 0 ? "high" : "auto"}
+                loading={bgIndex === 0 ? "eager" : "lazy"}
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Subtle Dark-to-Transparent Gradient Overlays for Readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent pointer-events-none z-10" />
+          {/* Bottom fade to blend cleanly into the rest of the page */}
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none z-10" />
+        </div>
 
       {/* Hero Content */}
       <div className="relative z-10 w-full mx-auto max-w-7xl px-4 py-24 sm:px-6">
@@ -56,14 +86,14 @@ export function Hero() {
             real-time chat, and a trust score that means something.
           </p>
 
-          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button asChild size="lg" className="bg-gradient-primary text-primary-foreground shadow-elegant hover:opacity-90 h-12 px-7 text-base">
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row w-full max-w-md mx-auto sm:max-w-none">
+            <Button asChild size="lg" className="bg-gradient-primary text-primary-foreground shadow-elegant hover:opacity-90 h-12 px-7 text-base w-full sm:w-auto">
               <Link to="/signup">
                 Get verified — it's free
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="h-12 px-7 text-base">
+            <Button asChild size="lg" variant="outline" className="h-12 px-7 text-base w-full sm:w-auto">
               <Link to="/login">Explore marketplace</Link>
             </Button>
           </div>
@@ -87,7 +117,7 @@ export function Hero() {
   );
 }
 
-function PreviewCards() {
+const PreviewCards = memo(function PreviewCards() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -98,11 +128,12 @@ function PreviewCards() {
   };
 
   const items = [
-    { id: "calc", title: "Casio FX-991ES Plus", price: "₹950", ai: "₹850–₹1000", tag: "Calculator" },
-    { id: "notes", title: "DSA Handwritten Notes", price: "₹120", ai: "₹100–₹150", tag: "Notes" },
+    // Live items
+    { id: "calc", title: "Casio FX-991ES Plus", price: "₹950", ai: "₹850–₹1000", tag: "Calculator", image: "https://img.sanishtech.com/u/64c83726e8790b30931d183a2bd9dedf.jpg" },
+    { id: "notes", title: "DSA Handwritten Notes", price: "₹120", ai: "₹100–₹150", tag: "Notes", image: "https://img.sanishtech.com/u/28f66e560a0fa23ef0b1d74d811500a6.jpg" },
     { id: "cycle", title: "Hero Sprint Cycle", price: "₹3,200", ai: "₹2,800–₹3,500", tag: "Cycle", image: "https://img.sanishtech.com/u/6265559bd1a743db969c3886de8a91b7.jpg" },
-    { id: "mac", title: "MacBook Air M1", price: "₹45,000", ai: "₹42k–₹48k", tag: "Electronics" },
-    { id: "kit", title: "Engineering Drawing Kit", price: "₹450", ai: "₹400–₹500", tag: "Stationery" },
+    { id: "mac", title: "MacBook Air M1", price: "₹45,000", ai: "₹42k–₹48k", tag: "Electronics", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&auto=format&fit=crop" },
+    { id: "kit", title: "Engineering Drawing Kit", price: "₹450", ai: "₹400–₹500", tag: "Stationery", image: "https://images.unsplash.com/photo-1583086650426-302a2432c668?w=800&auto=format&fit=crop" },
   ];
 
   return (
@@ -141,6 +172,8 @@ function PreviewCards() {
                   <img 
                     src={it.image} 
                     alt={it.title} 
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" 
                   />
                 </div>
@@ -171,4 +204,4 @@ function PreviewCards() {
       </div>
     </div>
   );
-}
+});

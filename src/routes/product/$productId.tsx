@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { ChatModal } from "@/components/marketplace/ChatModal";
 import { AIRecommendations } from "@/components/landing/AIRecommendations";
+import { CampusMap } from "@/components/marketplace/CampusMap";
 
 export const Route = createFileRoute("/product/$productId")({
   component: ProductPage,
@@ -18,6 +19,8 @@ function ProductPage() {
   const { productId } = Route.useParams();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   // MOCK DATA based on ID (fallback to cycle)
   const product = {
@@ -30,7 +33,9 @@ function ProductPage() {
     image: productId === "calc" ? "https://img.sanishtech.com/u/6265559bd1a743db969c3886de8a91b7.jpg" : "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=800&auto=format&fit=crop",
     gallery: [
       productId === "calc" ? "https://img.sanishtech.com/u/6265559bd1a743db969c3886de8a91b7.jpg" : "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?w=800&auto=format&fit=crop"
+      "https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?w=800&auto=format&fit=crop",
+      "https://img.sanishtech.com/u/28f66e560a0fa23ef0b1d74d811500a6.jpg",
+      "https://img.sanishtech.com/u/64c83726e8790b30931d183a2bd9dedf.jpg"
     ],
     description: "Selling my item since I'm moving out of campus. Has been regularly serviced and is in great condition. Ready for immediate pickup.",
     seller: {
@@ -44,6 +49,8 @@ function ProductPage() {
       postedAt: "2 days ago"
     }
   };
+
+  const currentImage = selectedImage || product.image;
 
   return (
     <div className="min-h-screen bg-background">
@@ -64,15 +71,44 @@ function ProductPage() {
           {/* Left: Images */}
           <div className="flex flex-col gap-4">
             <div className="aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-card">
-              <img src={product.image} alt={product.title} className="h-full w-full object-cover" />
+              <img 
+                src={currentImage} 
+                alt={product.title} 
+                fetchPriority="high"
+                loading="eager"
+                decoding="async"
+                className="h-full w-full object-cover transition-opacity duration-300" 
+              />
             </div>
             {/* Gallery thumbnails */}
-            <div className="flex gap-4 overflow-x-auto">
+            <div className="flex gap-4 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden">
               {product.gallery.map((img, i) => (
-                <div key={i} className={`h-24 w-32 shrink-0 cursor-pointer overflow-hidden rounded-xl border-2 transition-all ${i === 0 ? "border-primary" : "border-transparent hover:border-primary/50"}`}>
-                  <img src={img} className="h-full w-full object-cover" />
+                <div 
+                  key={i} 
+                  onClick={() => setSelectedImage(img)}
+                  className={`h-24 w-32 shrink-0 cursor-pointer overflow-hidden rounded-xl border-2 transition-all ${currentImage === img ? "border-primary opacity-100" : "border-transparent opacity-70 hover:opacity-100 hover:border-primary/50"}`}
+                >
+                  <img src={img} alt="Thumbnail" loading="lazy" decoding="async" className="h-full w-full object-cover" />
                 </div>
               ))}
+            </div>
+
+            {/* Meetup Location Map */}
+            <div className="mt-4">
+              <h3 className="font-semibold mb-3">Suggested Meetup Location</h3>
+              <CampusMap 
+                locations={[
+                  {
+                    longitude: 77.2025,
+                    latitude: 28.6041,
+                    title: "Campus Library",
+                    description: "Meet outside the main entrance for exchange."
+                  }
+                ]}
+                center={{ longitude: 77.2025, latitude: 28.6041 }}
+                zoom={14}
+                className="h-[250px] sm:h-[300px] w-full rounded-2xl overflow-hidden shadow-sm border border-border"
+              />
             </div>
           </div>
 
@@ -148,7 +184,7 @@ function ProductPage() {
             {/* Seller Card */}
             <div className="mt-8 rounded-2xl border border-border bg-card p-5 shadow-sm">
               <div className="flex items-center gap-4">
-                <img src={product.seller.avatar} alt={product.seller.name} className="h-14 w-14 rounded-full bg-secondary" />
+                <img src={product.seller.avatar} alt={product.seller.name} loading="lazy" decoding="async" className="h-14 w-14 rounded-full bg-secondary" />
                 <div className="flex-1">
                   <div className="flex items-center gap-1.5">
                     <h3 className="font-bold">{product.seller.name}</h3>
@@ -168,7 +204,7 @@ function ProductPage() {
                 </div>
               </div>
 
-              <div className="mt-5 grid grid-cols-2 gap-3">
+              <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Button className="w-full shadow-elegant bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => setIsChatOpen(true)}>
                   <MessageSquare className="mr-2 h-4 w-4" />
                   Chat with Seller

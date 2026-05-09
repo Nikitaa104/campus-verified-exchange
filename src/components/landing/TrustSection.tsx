@@ -34,19 +34,19 @@ export function TrustSection() {
           transition={{ duration: 0.5 }}
           className="mx-auto mt-12 max-w-3xl overflow-hidden rounded-2xl border border-border bg-card shadow-elegant"
         >
-          <div className="grid grid-cols-3 border-b border-border bg-muted/40 text-sm font-semibold">
-            <div className="px-6 py-4 text-muted-foreground">Feature</div>
-            <div className="px-6 py-4 text-center text-muted-foreground">OLX & others</div>
-            <div className="px-6 py-4 text-center text-primary">Kampus</div>
+          <div className="grid grid-cols-[1.5fr_1fr_1fr] border-b border-border bg-muted/40 text-[10px] sm:text-sm font-semibold">
+            <div className="px-3 sm:px-6 py-4 text-muted-foreground">Feature</div>
+            <div className="px-2 sm:px-6 py-4 text-center text-muted-foreground">OLX & others</div>
+            <div className="px-2 sm:px-6 py-4 text-center text-primary">Kampus</div>
           </div>
           {compare.map((row) => (
-            <div key={row.label} className="grid grid-cols-3 border-b border-border last:border-0">
-              <div className="px-6 py-4 text-sm">{row.label}</div>
-              <div className="grid place-items-center px-6 py-4">
-                {row.olx ? <Check className="h-4 w-4 text-muted-foreground" /> : <X className="h-4 w-4 text-muted-foreground/50" />}
+            <div key={row.label} className="grid grid-cols-[1.5fr_1fr_1fr] border-b border-border last:border-0">
+              <div className="px-3 sm:px-6 py-4 text-[11px] sm:text-sm">{row.label}</div>
+              <div className="grid place-items-center px-2 sm:px-6 py-4">
+                {row.olx ? <Check className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" /> : <X className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground/50" />}
               </div>
-              <div className="grid place-items-center px-6 py-4">
-                {row.kampus ? <Check className="h-4 w-4 text-success" /> : <X className="h-4 w-4 text-muted-foreground/50" />}
+              <div className="grid place-items-center px-2 sm:px-6 py-4">
+                {row.kampus ? <Check className="h-3 w-3 sm:h-4 sm:w-4 text-success" /> : <X className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground/50" />}
               </div>
             </div>
           ))}
